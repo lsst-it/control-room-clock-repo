@@ -1,0 +1,91 @@
+<html>
+<head>
+  <style type="text/css">
+    body {
+      background-color: black;
+    }
+    p {
+      color: blue;
+    }
+    @font-face {
+      font-family: ds_digib;
+      src: local(ds_digib), url('EricssonGA628.woff') format('woff');
+    }
+    .clock-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 30px;
+    }
+    .clock {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .time {
+      font-family: ds_digib;
+      font-size: 250px;
+      font-stretch: extra-expanded;
+      color: #f00;
+      background-color: #211;
+      padding: 15px 20px;
+    }
+    .location {
+      font-family: ds_digib;
+      font-size: 100px;
+      font-stretch: extra-expanded;
+      color: #df2;
+      background-color: #202910;
+      padding: 10px 15px;
+    }
+  </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script>
+    function startClock() {
+      // Definir las ciudades y sus zonas horarias
+      var cities = [
+        { name: "Tucson", timeZone: "America/Phoenix" },
+        { name: "New York", timeZone: "America/New_York" },
+        { name: "Tokyo", timeZone: "Asia/Tokyo" },
+        { name: "Sydney", timeZone: "Australia/Sydney" },
+        { name: "London", timeZone: "Europe/London" }
+      ];
+
+      // Mostrar los relojes
+      cities.forEach(function(city) {
+        // Crear un contenedor para cada reloj
+        var clockContainer = $("<div class='clock'></div>");
+
+        // Mostrar la ubicación y zona horaria
+        clockContainer.append("<div class='location'>" + city.name + " </div>");
+
+        // Crear un contenedor para la hora
+        var timeContainer = $("<div class='time'></div>");
+        clockContainer.append(timeContainer);
+
+        // Iniciar la actualización en tiempo real para cada reloj
+        updateTime(city, timeContainer);
+
+        // Agregar el contenedor al cuerpo del documento
+        $(".clock-container").append(clockContainer);
+      });
+    }
+
+    function updateTime(city, timeContainer) {
+      // Obtener la hora actual en la zona horaria especificada
+      var cityTime = new Date().toLocaleTimeString("en-US", { timeZone: city.timeZone, hour12: false, hour: '2-digit', minute: '2-digit' });
+
+      // Mostrar la hora actual
+      timeContainer.html(cityTime);
+
+      // Programar la siguiente actualización después de 500 ms
+      setTimeout(function() {
+        updateTime(city, timeContainer);
+      }, 500);
+    }
+  </script>
+</head>
+<body onload="startClock()">
+  <div class="clock-container"></div>
+</body>
+</html>
+
